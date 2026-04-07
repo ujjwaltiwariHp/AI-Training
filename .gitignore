@@ -1,0 +1,54 @@
+# 🔐 Environment files (IMPORTANT)
+
+.env
+.env.*
+!.env.example
+
+# 📦 Node modules (all levels)
+
+node_modules/
+.pnpm-store/
+
+node_modules/
+**/node_modules/
+.env
+
+# 🏗 Build outputs
+
+dist/
+build/
+.next/
+out/
+
+# 🧠 Logs
+
+logs/
+*.log
+pino.log
+
+# 🧪 Coverage
+
+coverage/
+
+# 🗂 OS files
+
+.DS_Store
+Thumbs.db
+
+# 🧰 IDE files
+
+.vscode/
+.idea/
+
+# 🔄 Turbo cache
+
+.turbo/
+
+# 🔐 Secrets / keys
+
+*.pem
+*.key
+
+# 🐳 Docker
+
+docker-data/
