@@ -1,4 +1,7 @@
+version: '3.9'
+
 services:
+  # ─── Infrastructure ──────────────────────────────────────────
   redis:
     image: redis:7-alpine
     ports:
@@ -10,7 +13,39 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+    restart: unless-stopped
 
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: ai_training
+      POSTGRES_USER: aiuser
+      POSTGRES_PASSWORD: aipassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aiuser -d ai_training"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ─── Build 0: Foundation ─────────────────────────────────────
   day0-foundation:
     build:
       context: .
@@ -25,7 +60,72 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-    restart: always
+    restart: unless-stopped
+
+  # ─── Build 1: Streaming LLM ──────────────────────────────────
+  build-01-streaming-llm:
+    build:
+      context: .
+      dockerfile: apps/build-01-streaming-llm/Dockerfile
+    ports:
+      - "3001:3001"
+    env_file:
+      - apps/build-01-streaming-llm/.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=production
+      - PORT=3001
+    depends_on:
+      redis:
+        condition: service_healthy
+      day0-foundation:
+        condition: service_started
+    restart: unless-stopped
+
+  # ─── Build 2: FAQ Chatbot ────────────────────────────────────
+  build-02-faq-chatbot:
+    build:
+      context: .
+      dockerfile: apps/build-02-faq-chatbot/Dockerfile
+    ports:
+      - "3002:3002"
+    env_file:
+      - apps/build-02-faq-chatbot/.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=production
+      - PORT=3002
+    depends_on:
+      redis:
+        condition: service_healthy
+      build-01-streaming-llm:
+        condition: service_started
+    restart: unless-stopped
+
+  # ─── Build 3: RAG Pipeline ───────────────────────────────────
+  build-03-rag-pipeline:
+    build:
+      context: .
+      dockerfile: apps/build-03-rag-pipeline/Dockerfile
+    ports:
+      - "3003:3003"
+    env_file:
+      - apps/build-03-rag-pipeline/.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - CHROMA_URL=http://chromadb:8000
+      - NODE_ENV=production
+      - PORT=3003
+    depends_on:
+      redis:
+        condition: service_healthy
+      chromadb:
+        condition: service_healthy
+      build-02-faq-chatbot:
+        condition: service_started
+    restart: unless-stopped
 
 volumes:
   redis_data:
+  chroma_data:
+  postgres_data:
