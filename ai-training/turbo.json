@@ -5,6 +5,7 @@
     "OPENAI_API_KEY",
     "ANTHROPIC_API_KEY",
     "REDIS_URL",
+    "CHROMA_URL",
     "JWT_SECRET"
   ],
   "tasks": {

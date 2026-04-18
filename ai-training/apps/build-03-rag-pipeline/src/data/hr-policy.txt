@@ -1,0 +1,30 @@
+# HR Policy & Employee Handbook
+
+## Leave Policy
+Employees are entitled to 20 days of annual paid leave per calendar year. Leave must be requested at least 14 days in advance through the HR portal. Unused leave (up to 5 days) can be carried over to the first quarter of the following year.
+Sick leave is provided up to 10 days per year without medical certification. For absences extending beyond 3 consecutive days, a doctor's note must be submitted.
+Maternity leave is 16 weeks fully paid, and paternity leave is 4 weeks fully paid for biological, adoptive, or foster parents.
+
+## Remote Work Policy
+Employees holding eligible roles may work remotely up to 3 days a week. Core hours from 10:00 AM to 3:00 PM in the employee's local time zone must be adhered to for collaborative meetings.
+The company will provide a one-time stipend of $500 for home office equipment. A minimum internet speed of 50 Mbps is required. Employees are responsible for their secondary connectivity backups. Employees working remotely must maintain the same level of availability via Slack and Zoom as they would in the office.
+
+## Expense Reimbursement
+Travel and entertainment expenses incurred on company business will be reimbursed. Limits are $150 per night for accommodation and $50 per day for meals, un-receipted. Anything exceeding these figures requires a receipt uploaded to Expensify.
+Submissions must be made within 15 days of the expense incurrence. Approvals are processed on the 1st and 15th of each month by department heads. 
+
+## Code of Conduct
+Employees are expected to act professionally at all times. Discrimination based on race, gender, sexual orientation, disability, or religion is strictly prohibited. Harassment in any form, including passive-aggressive behavior or inappropriate jokes, will not be tolerated.
+Employees must declare any conflict of interest to their line manager and HR. This includes outside employment, consulting, or serving on the board of another organization that competes with NovaSaaS.
+
+## Performance Reviews
+Performance reviews are conducted bi-annually, in June and December. The process includes a self-assessment, peer feedback gathered anonymously, and a manager evaluation.
+Ratings run from 1 to 5, where 1 indicates "Needs Immediate Improvement" and 5 indicates "Exceeds Expectations". Salary adjustments and promotions are tied directly to these reviews, specifically the December cycle.
+
+## Onboarding Process
+The first 30 days are dedicated to compliance training and shadowing peers. The first 60 days focus on beginning primary duties with mentorship. By 90 days, the employee is expected to operate independently.
+Every new hire is assigned a 'Buddy' from a different department to help them navigate company culture and administrative questions.
+
+## IT Security Policy
+Passwords must be at least 14 characters long and changed every 90 days. Multi-factor authentication (MFA) is mandatory for all internal tools and cloud services.
+Company-issued laptops must not be used by unauthorized personnel, including family members. Data handling protocols demand that customer PII (Personally Identifiable Information) must never be downloaded to a local drive. In the event of a lost device, IT must be notified immediately to trigger a remote wipe.
