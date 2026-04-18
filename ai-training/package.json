@@ -8,7 +8,9 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "dev:day0": "turbo run dev --filter=day0-foundation"
+    "dev:day0": "turbo run dev --filter=day0-foundation",
+    "dev:build02": "turbo run dev --filter=build-02-faq-chatbot",
+    "dev:build03": "turbo run dev --filter=build-03-rag-pipeline"
   },
   "devDependencies": {
     "turbo": "latest"

@@ -1,0 +1,32 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379" # Use a different port to avoid conflict with root Redis if both are up
+    volumes:
+      - redis_data_build01:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+ 
+  streaming-llm-api:
+    build:
+      context: ../../ # Root of monorepo
+      dockerfile: apps/build-01-streaming-llm/Dockerfile
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - PORT=3001
+      - NODE_ENV=production
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: always
+ 
+volumes:
+  redis_data_build01:

@@ -1,0 +1,81 @@
+{
+  "company": "NovaSaaS",
+  "categories": ["billing", "features", "account", "troubleshooting", "security"],
+  "faqs": [
+    {
+      "category": "billing",
+      "question": "How do I upgrade my plan?",
+      "answer": "Go to Settings → Billing → Upgrade Plan. Changes are effective immediately."
+    },
+    {
+      "category": "billing",
+      "question": "Can I get a refund?",
+      "answer": "Refunds are available within 14 days of payment. Contact support@novasaas.com."
+    },
+    {
+      "category": "billing",
+      "question": "Do you offer enterprise pricing?",
+      "answer": "Yes, we offer custom enterprise plans. Please contact sales@novasaas.com for a quote."
+    },
+    {
+      "category": "billing",
+      "question": "What payment methods do you accept?",
+      "answer": "We accept all major credit cards and PayPal. For enterprise plans, we also support bank transfers."
+    },
+    {
+      "category": "features",
+      "question": "Does NovaSaaS support SSO?",
+      "answer": "Yes, SSO via SAML 2.0 is available on Business and Enterprise plans."
+    },
+    {
+      "category": "features",
+      "question": "How do I export my data?",
+      "answer": "You can export your data anytime by going to Settings → Data Management → Export as standard CSV or JSON."
+    },
+    {
+      "category": "features",
+      "question": "Is there a mobile app?",
+      "answer": "Yes, the NovaSaaS companion app is available on both iOS and Android."
+    },
+    {
+      "category": "account",
+      "question": "How do I reset my password?",
+      "answer": "Go to the login page and click 'Forgot Password'. You'll receive a reset link via email."
+    },
+    {
+      "category": "account",
+      "question": "Can I change my registered email address?",
+      "answer": "Yes, navigate to Profile → Security → Update Email. You will need to verify the new email address."
+    },
+    {
+      "category": "account",
+      "question": "How do I delete my account?",
+      "answer": "Go to Settings → Account → Danger Zone → Delete Account. Please note this action is permanent."
+    },
+    {
+      "category": "troubleshooting",
+      "question": "Why am I not receiving notification emails?",
+      "answer": "Please check your spam folder. If you still don't see them, ensure 'noreply@novasaas.com' is whitelisted in your email settings."
+    },
+    {
+      "category": "troubleshooting",
+      "question": "The dashboard is not loading properly.",
+      "answer": "Try clearing your browser cache and cookies, or logging in via an incognito window. If the issue persists, contact support."
+    },
+    {
+      "category": "troubleshooting",
+      "question": "I'm encountering an 'Error 500' when syncing data.",
+      "answer": "This is likely a temporary system issue. We actively monitor these errors. Please wait a few minutes and try again."
+    },
+    {
+      "category": "security",
+      "question": "Is my data encrypted?",
+      "answer": "Yes, all customer data is encrypted at rest using AES-256 and in transit via TLS 1.3."
+    },
+    {
+      "category": "security",
+      "question": "Do you have SOC 2 Type II compliance?",
+      "answer": "Yes, NovaSaaS undergoes an annual SOC 2 Type II audit. The latest report is available upon request for enterprise customers."
+    }
+  ]
+}
