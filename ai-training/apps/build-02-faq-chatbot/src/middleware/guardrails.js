@@ -34,11 +34,11 @@ export async function runGuardrails(message, sessionId, redis) {
     sanitized = sanitized.replace(pattern, `[${type.toUpperCase()}_REDACTED]`)
   }
 
-  // 4. Content Moderation (OpenAI free API)
-  const mod = await openai.moderations.create({ input: sanitized })
-  if (mod.results[0].flagged) {
-    throw { statusCode: 400, message: 'Message flagged by content moderation.' }
-  }
+  // 4. Content Moderation (Skipped: requires OpenAI key)
+  // const mod = await openai.moderations.create({ input: sanitized })
+  // if (mod.results[0].flagged) {
+  //   throw { statusCode: 400, message: 'Message flagged by content moderation.' }
+  // }
 
   // 5. Injection scan
   const lowerMsg = sanitized.toLowerCase()
