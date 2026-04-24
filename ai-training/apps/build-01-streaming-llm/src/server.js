@@ -15,11 +15,9 @@ import { GeminiProvider } from './providers/gemini.js'
  
 const fastify = Fastify({ logger: loggerConfig, trustProxy: true })
  
-// Initialise providers once — they are stateless and can be reused
+// Initialise providers once
 const providers = {
-  openai:    new OpenAIProvider(config.openaiKey),
-  anthropic: new AnthropicProvider(config.anthropicKey),
-  gemini:    new GeminiProvider(config.geminiKey)
+  anthropic: new AnthropicProvider(config.anthropicKey)
 }
  
 async function start() {

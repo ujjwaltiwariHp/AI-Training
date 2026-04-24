@@ -98,8 +98,14 @@ export async function faqRoutes(fastify) {
         reply.raw.write(`data: ${JSON.stringify({ type: 'done', usage: { inputTokens, outputTokens, cost } })}\n\n`)
         reply.raw.end()
     } catch(err) {
-        req.log.error(err)
-        reply.raw.write(`data: ${JSON.stringify({ type: 'error', error: 'Failed to generate response' })}\n\n`)
+        req.log.error({ 
+            message: err.message, 
+            status: err.status, 
+            raw: err.error,
+            stack: err.stack 
+        }, 'FAQ generation failed')
+        
+        reply.raw.write(`data: ${JSON.stringify({ type: 'error', error: `FAQ Error: ${err.message}` })}\n\n`)
         reply.raw.end()
     }
   })

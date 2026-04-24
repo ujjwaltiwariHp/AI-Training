@@ -6,7 +6,7 @@ import { createConversationStore } from '../memory/conversation.js'
 const ChatSchema = z.object({
   sessionId: z.string().min(1).max(100),
   message:   z.string().min(1).max(5000),
-  provider:  z.enum(['openai', 'anthropic', 'gemini']).optional(),
+  provider:  z.enum(['openai', 'anthropic', 'gemini', 'bedrock']).optional(),
   systemPrompt: z.string().optional()
 })
  
@@ -30,23 +30,18 @@ export async function chatRoutes(fastify, opts) {
     const userMsg = { role: 'user', content: message }
     history.push(userMsg)
  
-    // 4. Pick provider order for fallback chain
-    // Default order: Gemini -> OpenAI -> Anthropic (as Gemini is the new primary requested)
-    let providerOrder = [providers.gemini, providers.openai, providers.anthropic]
+    // 4. Strictly Anthropic Only (as requested by user)
+    let providerOrder = [providers.anthropic]
     
-    if (provider === 'openai') {
-      providerOrder = [providers.openai, providers.gemini, providers.anthropic]
-    } else if (provider === 'anthropic') {
-      providerOrder = [providers.anthropic, providers.gemini, providers.openai]
-    } else if (provider === 'gemini') {
-      providerOrder = [providers.gemini, providers.openai, providers.anthropic]
-    }
+    // Log the attempt
+    req.log.info({ correlationId: req.correlationId, sessionId }, 'Starting Anthropic-only chat request')
  
     // 5. Set up SSE response headers
     reply.raw.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
       'Connection': 'keep-alive',
+      'Access-Control-Allow-Origin': req.headers.origin || '*',
       'X-Correlation-Id': req.correlationId
     })
  
@@ -124,6 +119,17 @@ export async function chatRoutes(fastify, opts) {
     return store.get(req.params.sessionId)
   })
  
+  fastify.post('/api/logs', async (req, reply) => {
+    const { action, details, sessionId } = req.body
+    req.log.info({ 
+      correlationId: req.correlationId, 
+      sessionId,
+      action,
+      details 
+    }, 'Client Action')
+    return { status: 'ok' }
+  })
+
   fastify.delete('/api/chat/:sessionId', async (req, reply) => {
     await store.clear(req.params.sessionId)
     return reply.code(204).send()
