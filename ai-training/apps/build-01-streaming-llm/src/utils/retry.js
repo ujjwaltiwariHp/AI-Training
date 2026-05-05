@@ -25,14 +25,21 @@ export async function* withFallback(providers, request, log) {
   const errors = []
   for (const provider of providers) {
     try {
+      log.info({ provider: provider.name }, 'Attempting LLM request')
       yield* provider.streamChat(request)
       return  
     } catch (err) {
-      const msg = `${provider.name}: ${err.message}`
-      errors.push(msg)
-      log.warn({ provider: provider.name, err: err.message },
-        'Provider failed, trying next in fallback chain')
+      // Log the full error for terminal visibility
+      log.error({ 
+        provider: provider.name, 
+        message: err.message,
+        status: err.status,
+        stack: err.stack,
+        raw: err.error // Some SDKs put more detail here
+      }, 'Provider failed')
+      
+      errors.push(`${provider.name}: ${err.message}`)
     }
   }
-  throw new Error(`Fallback failed: ${errors.join(' | ')}`)
+  throw new Error(`All providers failed: ${errors.join(' | ')}`)
 }

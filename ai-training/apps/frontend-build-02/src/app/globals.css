@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F8F9FA;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --accent-amber: #EA580C;
+    --border-main: #E2E8F0;
+  }
+
+  .dark {
+    --bg-primary: #020617;
+    --bg-secondary: #0F172A;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --accent-amber: #FB923C;
+    --border-main: #1E293B;
+  }
+
+  body {
+    @apply font-sans text-slate-900 bg-white dark:bg-gray-950 transition-colors duration-500;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-800 rounded-full hover:bg-gray-400 dark:hover:bg-gray-700 transition-colors;
+  }
+}
+
+/* Smooth transitions for theme switching */
+* {
+  @apply transition-colors duration-300;
+}

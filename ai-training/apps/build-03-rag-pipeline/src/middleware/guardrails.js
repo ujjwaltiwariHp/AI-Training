@@ -1,7 +1,3 @@
-import OpenAI from 'openai'
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-
 const PII_PATTERNS = {
   email: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
   phone: /(\+?\d[\s\-.]?){9,13}\d/g,
@@ -34,13 +30,7 @@ export async function runGuardrails(message, sessionId, redis) {
     sanitized = sanitized.replace(pattern, `[${type.toUpperCase()}_REDACTED]`)
   }
 
-  // 4. Content Moderation (OpenAI free API)
-  const mod = await openai.moderations.create({ input: sanitized })
-  if (mod.results[0].flagged) {
-    throw { statusCode: 400, message: 'Message flagged by content moderation.' }
-  }
-
-  // 5. Injection scan
+  // 4. Injection scan
   const lowerMsg = sanitized.toLowerCase()
   for (const pattern of INJECTION_PATTERNS) {
     if (lowerMsg.includes(pattern)) {

@@ -9,17 +9,13 @@ import correlationIdPlugin from './middleware/correlation-id.js'
 import redisPlugin from './plugins/redis.js'
 import { healthRoutes } from './routes/health.js'
 import { chatRoutes } from './routes/chat.js'
-import { OpenAIProvider } from './providers/openai.js'
 import { AnthropicProvider } from './providers/anthropic.js'
-import { GeminiProvider } from './providers/gemini.js'
  
 const fastify = Fastify({ logger: loggerConfig, trustProxy: true })
  
-// Initialise providers once — they are stateless and can be reused
+// Initialise providers once
 const providers = {
-  openai:    new OpenAIProvider(config.openaiKey),
-  anthropic: new AnthropicProvider(config.anthropicKey),
-  gemini:    new GeminiProvider(config.geminiKey)
+  anthropic: new AnthropicProvider(config.anthropicKey)
 }
  
 async function start() {

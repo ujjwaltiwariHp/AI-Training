@@ -1,5 +1,4 @@
 // src/providers/anthropic.js
-import Anthropic from '@anthropic-ai/sdk'
 import { LLMProvider } from './base.js'
  
 const PRICING = {
@@ -13,60 +12,71 @@ export class AnthropicProvider extends LLMProvider {
     super()
     this.name = 'anthropic'
     this.model = 'claude-3-5-haiku-20241022'
-    this.client = new Anthropic({ apiKey })
+    this.apiKey = apiKey
+    // If you have a specific gateway URL, set it in ANTHROPIC_BASE_URL
+    this.baseUrl = process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com/v1'
   }
  
   async *streamChat({ messages, systemPrompt, maxTokens = 1000, correlationId, signal }) {
-    try {
-      // NOTE: Anthropic system prompt is top-level, NOT inside messages array
-      const params = {
-        model: this.model,
-        max_tokens: maxTokens,   // REQUIRED — 400 error without it
-        messages,
-        stream: true
-      }
-      if (systemPrompt) params.system = systemPrompt
- 
-      const stream = await this.client.messages.create(params, {
-        signal
-      })
- 
-      let inputTokens = 0
-      let outputTokens = 0
- 
-      for await (const event of stream) {
-        if (signal?.aborted) break
-        
-        if (event.type === 'content_block_delta') {
-          const token = event.delta?.text
-          if (token) yield { type: 'token', content: token }
-        }
-        if (event.type === 'message_delta' && event.usage) {
-          outputTokens = event.usage.output_tokens
-        }
-        if (event.type === 'message_start' && event.message?.usage) {
-          inputTokens = event.message.usage.input_tokens
-        }
-      }
- 
-      yield {
-        type: 'done',
-        usage: { 
-          inputTokens, 
-          outputTokens, 
-          model: this.model, 
-          provider: this.name,
-          cost: this.calculateCost(inputTokens, outputTokens) 
-        }
-      }
-    } catch (err) {
-      if (err.name === 'AbortError' || signal?.aborted) return
-      throw err
+    const body = {
+      model: this.model,
+      max_tokens: maxTokens,
+      messages,
+      stream: true
     }
-  }
- 
-  calculateCost(inputTokens, outputTokens) {
-    const p = PRICING[this.model] || PRICING['claude-3-5-haiku-20241022']
-    return ((inputTokens * p.input) + (outputTokens * p.output)) / 1_000_000
+    if (systemPrompt) body.system = systemPrompt
+
+    const response = await fetch(`${this.baseUrl}/messages`, {
+      method: 'POST',
+      headers: {
+        'x-api-key': this.apiKey,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+        'x-correlation-id': correlationId || ''
+      },
+      body: JSON.stringify(body),
+      signal
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ message: 'Unknown error' }))
+      throw new Error(`Anthropic API Error (${response.status}): ${JSON.stringify(errorData)}`)
+    }
+
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder()
+    let buffer = ''
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        buffer = lines.pop() || ''
+
+        for (const line of lines) {
+          const trimmed = line.trim()
+          if (!trimmed || !trimmed.startsWith('data:')) continue
+          
+          try {
+            const data = JSON.parse(trimmed.slice(5))
+            if (data.type === 'content_block_delta' && data.delta?.text) {
+              yield { type: 'token', content: data.delta.text }
+            }
+            if (data.type === 'message_delta' && data.usage) {
+              // usage info
+            }
+          } catch (e) {
+            // ignore malformed lines
+          }
+        }
+      }
+      
+      yield { type: 'done', usage: { model: this.model, provider: this.name } }
+    } finally {
+      reader.releaseLock()
+    }
   }
 }
