@@ -6,7 +6,7 @@ import { createConversationStore } from '../memory/conversation.js'
 const ChatSchema = z.object({
   sessionId: z.string().min(1).max(100),
   message:   z.string().min(1).max(5000),
-  provider:  z.enum(['openai', 'anthropic', 'gemini', 'bedrock']).optional(),
+  provider:  z.enum(['anthropic', 'bedrock']).optional(),
   systemPrompt: z.string().optional()
 })
  

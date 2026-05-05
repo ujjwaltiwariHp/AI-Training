@@ -21,11 +21,6 @@ services:
       - "8000:8000"
     volumes:
       - chroma_data:/chroma/chroma
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     restart: unless-stopped
 
   postgres:
@@ -52,11 +47,11 @@ services:
       dockerfile: apps/day0-foundation/Dockerfile
     ports:
       - "3000:3000"
-    env_file:
-      - apps/day0-foundation/.env
     environment:
       - REDIS_URL=redis://redis:6379
       - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
     depends_on:
       redis:
         condition: service_healthy
@@ -73,8 +68,10 @@ services:
       - REDIS_URL=redis://redis:6379
       - NODE_ENV=production
       - PORT=3001
+      - JWT_SECRET=${JWT_SECRET}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - AWS_BEARER_TOKEN_BEDROCK=${AWS_BEARER_TOKEN_BEDROCK}
+      - CORS_ORIGINS=*
     depends_on:
       redis:
         condition: service_healthy
@@ -93,7 +90,9 @@ services:
       - REDIS_URL=redis://redis:6379
       - NODE_ENV=production
       - PORT=3002
+      - JWT_SECRET=${JWT_SECRET}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - CORS_ORIGINS=*
     depends_on:
       redis:
         condition: service_healthy
@@ -113,11 +112,14 @@ services:
       - CHROMA_URL=http://chromadb:8000
       - NODE_ENV=production
       - PORT=3003
+      - JWT_SECRET=${JWT_SECRET}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - CORS_ORIGINS=*
     depends_on:
       redis:
         condition: service_healthy
       chromadb:
-        condition: service_healthy
+        condition: service_started
       build-02-faq-chatbot:
         condition: service_started
     restart: unless-stopped
@@ -134,7 +136,7 @@ services:
       - PORT=3004
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - FAQ_BACKEND_URL=http://build-02-faq-chatbot:3002
-      - NEXT_PUBLIC_DEFAULT_MODEL=claude-haiku-4-5
+      - NEXT_PUBLIC_DEFAULT_MODEL=claude-3-5-haiku-20241022
     depends_on:
       build-02-faq-chatbot:
         condition: service_started

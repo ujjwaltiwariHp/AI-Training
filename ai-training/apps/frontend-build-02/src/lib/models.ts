@@ -2,7 +2,7 @@ import { ModelInfo } from '@/types/models'
 
 export const ANTHROPIC_MODELS: ModelInfo[] = [
   {
-    id: 'claude-opus-4-5',
+    id: 'claude-3-5-opus-20240229',
     label: 'Claude Opus',
     tier: 'Most Capable',
     badge: '⚡ Pro',
@@ -13,7 +13,7 @@ export const ANTHROPIC_MODELS: ModelInfo[] = [
     description: 'Most powerful. Best for complex reasoning.'
   },
   {
-    id: 'claude-sonnet-4-5',
+    id: 'claude-3-5-sonnet-20241022',
     label: 'Claude Sonnet',
     tier: 'Balanced',
     badge: '🔥 Balanced',
@@ -24,7 +24,7 @@ export const ANTHROPIC_MODELS: ModelInfo[] = [
     description: 'Best balance of speed and intelligence.'
   },
   {
-    id: 'claude-haiku-4-5',
+    id: 'claude-3-5-haiku-20241022',
     label: 'Claude Haiku',
     tier: 'Fast',
     badge: '⚡ Fast',
@@ -37,7 +37,7 @@ export const ANTHROPIC_MODELS: ModelInfo[] = [
   }
 ]
 
-export const DEFAULT_MODEL = 'claude-haiku-4-5'
+export const DEFAULT_MODEL = 'claude-3-5-haiku-20241022'
 
 export function calculateCost(modelId: string, inputTokens: number, outputTokens: number): number {
   const model = ANTHROPIC_MODELS.find(m => m.id === modelId)

@@ -9,9 +9,7 @@ import correlationIdPlugin from './middleware/correlation-id.js'
 import redisPlugin from './plugins/redis.js'
 import { healthRoutes } from './routes/health.js'
 import { chatRoutes } from './routes/chat.js'
-import { OpenAIProvider } from './providers/openai.js'
 import { AnthropicProvider } from './providers/anthropic.js'
-import { GeminiProvider } from './providers/gemini.js'
  
 const fastify = Fastify({ logger: loggerConfig, trustProxy: true })
  

@@ -5,8 +5,9 @@ import { ragQuery } from '../services/rag-service.js'
 import { langchainQuery } from '../services/langchain/lc-query.js'
 import { langchainIngest } from '../services/langchain/lc-ingest.js'
 import Anthropic from '@anthropic-ai/sdk'
+import { config } from '../config.js'
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const anthropic = new Anthropic({ apiKey: config.anthropicKey })
 
 export async function ragRoutes(fastify) {
   fastify.post('/api/rag/ingest', async (req, reply) => {
@@ -60,7 +61,7 @@ export async function ragRoutes(fastify) {
         reply.raw.setHeader('Connection', 'keep-alive')
 
         const stream = await anthropic.messages.stream({
-            model: 'claude-haiku-4-5',
+            model: 'claude-3-5-haiku-20241022',
             max_tokens: 1000,
             system: 'You are an HR policy assistant. Answer ONLY from the provided context sections. Always cite the source section name. If the answer is not in the context, say: "I could not find this in the HR policy document."',
             messages

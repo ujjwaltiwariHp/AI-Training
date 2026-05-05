@@ -1,4 +1,4 @@
-// File: /home/ujjwal-tiwari/AI-Training/ai-training/apps/frontend-build-02/src/app/api/models/route.ts
+// File: /home/ujjwal/Personal/AI-Training/ai-training/apps/frontend-build-02/src/app/api/models/route.ts
 import * as entry from '../../../../../src/app/api/models/route.js'
 import type { NextRequest } from 'next/server.js'
 

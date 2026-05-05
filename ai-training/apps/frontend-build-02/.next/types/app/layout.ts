@@ -1,4 +1,4 @@
-// File: /home/ujjwal-tiwari/AI-Training/ai-training/apps/frontend-build-02/src/app/layout.tsx
+// File: /home/ujjwal/Personal/AI-Training/ai-training/apps/frontend-build-02/src/app/layout.tsx
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

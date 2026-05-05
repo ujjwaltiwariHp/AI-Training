@@ -3,9 +3,10 @@ import { loadPrompt } from '../services/prompt-loader.js'
 import { runGuardrails, validateOutput } from '../middleware/guardrails.js'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
+import { config } from '../config.js'
 
 export async function faqRoutes(fastify) {
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  const anthropic = new Anthropic({ apiKey: config.anthropicKey })
   
   // Lazily load or read faqData
   let faqData = null;
@@ -63,7 +64,7 @@ export async function faqRoutes(fastify) {
 
     try {
         const stream = await anthropic.messages.stream({
-            model: model || 'claude-haiku-4-5',
+            model: model || 'claude-3-5-haiku-20241022',
             max_tokens: 1000,
             system: systemPrompt,
             messages: history
